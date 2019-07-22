@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import reactor.core.publisher.Mono;
+
 @EnableAutoConfiguration
 @RestController
 @CrossOrigin // So that javascript can be hosted elsewhere
@@ -18,8 +20,8 @@ public class Frontend {
 
   String backendBaseUrl = System.getProperty("spring.example.backendBaseUrl", "http://localhost:9000");
 
-  @RequestMapping("/") public String callBackend() {
-    return restTemplate.getForObject(backendBaseUrl + "/api", String.class);
+  @RequestMapping("/") public Mono<String> callBackend() {
+    return Mono.just(restTemplate.getForObject(backendBaseUrl + "/api", String.class));
   }
 
   @Bean RestTemplate restTemplate() {

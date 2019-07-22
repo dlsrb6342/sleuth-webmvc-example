@@ -6,12 +6,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import reactor.core.publisher.Mono;
+
 @EnableAutoConfiguration
 @RestController
 public class Backend {
 
-  @RequestMapping("/api") public String printDate() {
-    return new Date().toString();
+  @RequestMapping("/api") public Mono<String> printDate() {
+    return Mono.just(new Date().toString());
   }
 
   public static void main(String[] args) {
