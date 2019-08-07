@@ -33,7 +33,7 @@ public class Frontend {
   String backendBaseUrl = System.getProperty("spring.example.backendBaseUrl", "http://localhost:9000");
 
   public Mono<ServerResponse> callBackend(ServerRequest request) {
-    log.info("In Handler MDC : {}", MDC.getCopyOfContextMap());
+    log.info("In Handler MDC : {}", MDC.get("requestId"));
     return webClient.get().uri(backendBaseUrl + "/api")
                     .retrieve().bodyToMono(String.class)
                     .flatMap(s -> ServerResponse.ok().body(BodyInserters.fromObject(s)));
@@ -41,7 +41,7 @@ public class Frontend {
 
   @Bean WebFilter addFieldFilter() {
     return (exchange, chain) -> {
-      log.info("In Filter.PRE MDC : {}", MDC.getCopyOfContextMap());
+      log.info("In Filter.PRE RequestId : {}", MDC.get("requestId"));
 
       if (MDC.get("requestId") != null) {
         ExtraFieldPropagation.set("requestId", MDC.get("requestId"));
